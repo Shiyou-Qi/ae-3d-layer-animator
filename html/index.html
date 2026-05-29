@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>3D 图层动画生成器</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../lib/jquery.js"></script>
+    <script src="../jsx/hostscript.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🎬 3D 图层动画生成器</h1>
+            <p class="version">v1.0.0</p>
+        </div>
+
+        <!-- 项目信息面板 -->
+        <div class="panel">
+            <div class="panel-title">📋 项目信息</div>
+            <div class="panel-content">
+                <div class="info-row">
+                    <label>当前合成:</label>
+                    <span id="compName" class="info-value">--</span>
+                </div>
+                <div class="info-row">
+                    <label>合成尺寸:</label>
+                    <span id="compSize" class="info-value">--</span>
+                </div>
+                <div class="info-row">
+                    <label>图层数量:</label>
+                    <span id="layerCount" class="info-value">0</span>
+                </div>
+                <div class="info-row">
+                    <label>合成时长:</label>
+                    <span id="compDuration" class="info-value">--</span>
+                </div>
+                <button id="refreshBtn" class="btn-refresh">🔄 刷新信息</button>
+            </div>
+        </div>
+
+        <!-- 3D设置面板 -->
+        <div class="panel">
+            <div class="panel-title">⚙️ 3D 设置参数</div>
+            <div class="panel-content">
+                <!-- 动画时长 -->
+                <div class="form-group">
+                    <label for="duration">动画时长 (秒):</label>
+                    <div class="input-group">
+                        <input type="number" id="duration" value="5" min="0.5" step="0.5" max="60">
+                        <span class="unit">秒</span>
+                    </div>
+                </div>
+
+                <!-- 摄像机距离 -->
+                <div class="form-group">
+                    <label for="cameraDistance">摄像机距离:</label>
+                    <div class="input-group">
+                        <input type="range" id="cameraDistance" min="500" max="3000" step="100" value="1500">
+                        <input type="number" id="cameraDistanceValue" value="1500" min="500" max="3000" step="100">
+                        <span class="unit">px</span>
+                    </div>
+                </div>
+
+                <!-- 旋转强度 -->
+                <div class="form-group">
+                    <label for="rotationIntensity">旋转强度:</label>
+                    <div class="input-group">
+                        <input type="range" id="rotationIntensity" min="0.5" max="2" step="0.1" value="1">
+                        <span id="rotationValue" class="intensity-value">1.0x</span>
+                    </div>
+                </div>
+
+                <!-- X轴旋转 -->
+                <div class="form-group">
+                    <label for="rotationX">X轴旋转角度:</label>
+                    <div class="input-group">
+                        <input type="range" id="rotationX" min="-45" max="45" step="5" value="0">
+                        <span id="rotationXValue" class="angle-value">0°</span>
+                    </div>
+                </div>
+
+                <!-- Y轴旋转 -->
+                <div class="form-group">
+                    <label for="rotationY">Y轴旋转角度:</label>
+                    <div class="input-group">
+                        <input type="range" id="rotationY" min="-45" max="45" step="5" value="0">
+                        <span id="rotationYValue" class="angle-value">0°</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 动画类型选择 -->
+        <div class="panel">
+            <div class="panel-title">🎬 动画类型</div>
+            <div class="panel-content animation-types">
+                <label class="radio-label">
+                    <input type="radio" name="animationType" value="rotate" checked>
+                    <span class="radio-icon">🔄</span>
+                    <span class="radio-text">旋转动画<br><small>Z轴旋转</small></span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="animationType" value="slide">
+                    <span class="radio-icon">↔️</span>
+                    <span class="radio-text">滑动动画<br><small>3D透视</small></span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="animationType" value="zoom">
+                    <span class="radio-icon">🔍</span>
+                    <span class="radio-text">缩放动画<br><small>Z深度</small></span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="animationType" value="wave">
+                    <span class="radio-icon">〰️</span>
+                    <span class="radio-text">波浪动画<br><small>层级效果</small></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 图层处理选项 -->
+        <div class="panel">
+            <div class="panel-title">📦 图层处理选项</div>
+            <div class="panel-content">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="enable3D" checked>
+                    <span class="checkbox-custom"></span>
+                    <span>✓ 启用所有图层的3D开关</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="enableDepth" checked>
+                    <span class="checkbox-custom"></span>
+                    <span>✓ 自动设置图层深度关系</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="createCamera" checked>
+                    <span class="checkbox-custom"></span>
+                    <span>✓ 自动创建摄像机</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="createLights" id="">
+                    <span class="checkbox-custom"></span>
+                    <span>✓ 创建灯光照明</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="addMotionBlur">
+                    <span class="checkbox-custom"></span>
+                    <span>✓ 添加运动模糊</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="randomOffset">
+                    <span class="checkbox-custom"></span>
+                    <span>✓ 随机图层延迟</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 缓动函数选择 -->
+        <div class="panel">
+            <div class="panel-title">⏱️ 缓动函数</div>
+            <div class="panel-content">
+                <select id="easeType" class="select-ease">
+                    <option value="linear">线性 - Linear</option>
+                    <option value="easeIn">加速 - Ease In</option>
+                    <option value="easeOut">减速 - Ease Out</option>
+                    <option value="easeInOut" selected>加减速 - Ease In Out</option>
+                    <option value="easeOutBounce">弹性 - Bounce</option>
+                    <option value="easeInCirc">圆形加速 - Circle In</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="button-group">
+            <button id="previewBtn" class="btn btn-preview">👁️ 预览</button>
+            <button id="applyBtn" class="btn btn-apply">✨ 应用动画</button>
+            <button id="resetBtn" class="btn btn-reset">↺ 重置参数</button>
+        </div>
+
+        <!-- 进度提示 -->
+        <div id="statusBar" class="status-bar hidden">
+            <div class="progress-container">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            <div id="statusText" class="status-text">处理中...</div>
+        </div>
+
+        <!-- 底部提示 -->
+        <div class="footer">
+            <p>💡 提示: 请确保已选择合成，然后配置参数后点击应用动画</p>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionManifest Version="1.0">
+    <ExtendsProxy DebugPort="11001">
+        <HostList>
+            <Host Name="AEFT" Version="[13.0,24.9]" />
+        </HostList>
+        <LocalizationInfo>
+            <Languages>
+                <Language>zh_CN</Language>
+                <Language>en_US</Language>
+            </Languages>
+        </LocalizationInfo>
+    </ExtendsProxy>
+    <ExtensionList>
+        <Extension Id="com.ae3d.animator.panel" Version="1.0.0"/>
+    </ExtensionList>
+    <ExecutionEnvironment>
+        <HostList>
+            <Host Name="AEFT" Version="[13.0,24.9]" />
+        </HostList>
+    </ExecutionEnvironment>
+    <DispatchInfoList>
+        <Extension Id="com.ae3d.animator.panel">
+            <DispatchInfo>
+                <Resources>
+                    <mainPath>./html/index.html</mainPath>
+                </Resources>
+                <UI>
+                    <Type>Panel</Type>
+                    <Menu>3D 图层动画生成器</Menu>
+                    <Geometry>
+                        <Size>
+                            <Width>500</Width>
+                            <Height>750</Height>
+                        </Size>
+                    </Geometry>
+                </UI>
+            </DispatchInfo>
+        </Extension>
+    </DispatchInfoList>
+</ExtensionManifest>
