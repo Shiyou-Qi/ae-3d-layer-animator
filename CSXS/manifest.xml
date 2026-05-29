@@ -2,7 +2,7 @@
 <ExtensionManifest Version="1.0">
     <ExtendsProxy DebugPort="11001">
         <HostList>
-            <Host Name="AEFT" Version="[13.0,24.9]" />
+            <Host Name="AEFT" Version="[13.0,24.6]" />
         </HostList>
         <LocalizationInfo>
             <Languages>
@@ -16,18 +16,19 @@
     </ExtensionList>
     <ExecutionEnvironment>
         <HostList>
-            <Host Name="AEFT" Version="[13.0,24.9]" />
+            <Host Name="AEFT" Version="[13.0,24.6]" />
         </HostList>
     </ExecutionEnvironment>
     <DispatchInfoList>
         <Extension Id="com.ae3d.animator.panel">
             <DispatchInfo>
                 <Resources>
-                    <mainPath>./html/index.html</mainPath>
+                    <ScriptPath>./jsx/hostscript.js</ScriptPath>
+                    <MainPath>./html/index.html</MainPath>
                 </Resources>
                 <UI>
                     <Type>Panel</Type>
-                    <Menu>3D 图层动画生成器</Menu>
+                    <Menu>3D图层动画生成器</Menu>
                     <Geometry>
                         <Size>
                             <Width>500</Width>
